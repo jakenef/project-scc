@@ -29,7 +29,7 @@ def prepost(graph: GRAPH) -> list[dict[str, list[int]]]:
         tree[u][1] = clock
         clock += 1
     
-    for u in sorted(graph.keys()):
+    for u in graph.keys():
         if u not in visited:
             tree: dict[str, list[int]] = {}
             explore(u, tree)
@@ -43,21 +43,42 @@ def find_sccs(graph: GRAPH) -> list[set[str]]:
     Return a list of the strongly connected components in the graph.
     The list should be returned in order of sink-to-source
     """
-    postOrderForest = prepost(graph)
-
-    nodesInPostOrder = [str] # get list of nodes in descending postorder from postOrderForest
-
+    
+    # 1. reverse the graph 
     reverseGraph: GRAPH = {}
 
-    for node, edges in graph.items():
-        for edge in edges:
-            if edge not in reverseGraph:
-                reverseGraph[edge] = []
-            reverseGraph[edge].append(node)
-    
-    reverseGraphPostOrder: GRAPH = {} # for v in nodesInPostOrder, reverseGraphPostOrder[v] = reverseGraph.get(v)
+    # Initialize all nodes in reverse graph
+    for node in graph:
+        reverseGraph[node] = []
 
-    unformattedSCCs = prepost(reverseGraphPostOrder)
+    # Add reversed edges
+    for node in graph:
+        for neighbor in graph[node]:
+            reverseGraph[neighbor].append(node)
+
+    # 2. run DFS on reversed graph to get postorder numbers
+    reverseGraphPostOrderForest = prepost(reverseGraph) 
+
+    # 3. order the list of nodes from the graph by descending postorder
+    all_nodes_with_post = []
+    for tree in reverseGraphPostOrderForest:
+        for node, times in tree.items():
+            post_time = times[1]
+            all_nodes_with_post.append((node, post_time))
+
+    # Sort by post-order time in descending order
+    all_nodes_with_post.sort(key=lambda x: x[1], reverse=True)
+
+    # Extract just the node names
+    nodesInPostOrder = [node for node, post_time in all_nodes_with_post]
+
+    originalGraphPostOrder: GRAPH = {v: graph.get(v, []) for v in nodesInPostOrder}
+    for v in graph:
+        if v not in originalGraphPostOrder:
+            originalGraphPostOrder[v] = graph[v]
+    
+    # 4. run DFS on original graph in the order of the nodes from the postorder list
+    unformattedSCCs = prepost(originalGraphPostOrder)
     sccList = []
 
     for scc in unformattedSCCs:
