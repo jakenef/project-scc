@@ -323,11 +323,21 @@ The find_sccs function implements Kosaraju's algorithm with a theoretical time c
 
 ### Design Experience
 
-_Fill me in_
+I worked with Brandon Monson and Porter Schollenberger on September 29 to design the classify_edges function, which uses pre and post numbers to categorize each directed edge as tree/forward, back, or cross. We flattened the forest of DFS trees into a single dictionary mapping each node to its (pre, post) values so we could do O(1) lookups, which meant no major data reorganization beyond packaging results from DFS. The key rule we applied is that if the interval for one node contains the other’s, that node is the ancestor, so edges from ancestor to descendant are tree/forward and edges from descendant to ancestor are back. Edges that do not satisfy either condition are cross edges. With the times available, the classification step is just iterating over all edges, which adds O(e) time on top of the original DFS. That keeps the total time complexity O(v+e), and density only affects the number of edges checked.
 
 ### Articulation Points Discussion
 
-_Fill me in_
+An articulation point in my mind is a point of interest on a graph because it is the only way by which nodes on one end can get to nodes on the other side of the articulation point.
+
+**Mountain Pass**
+-In this example, nodes are the intersections and edges are roads that connect them.
+-An articulation point would be a bridge or a mountain pass that serves as the only connection between two large regions of the road network.
+-Knowing this articulation point is useful because if that road segment becomes unusable due to an accident, entire regions become disconnected. Transportation planners can use this knowledge to add more redundancy.
+
+**Power Grids**
+-In this example, nodes are power stations and edges are transmission lines carrying electricity between them.
+-An articulation point would be a critical power station that, if taken offline, would cut off electricity supply to an entire area of the grid.
+-Identifying these articulation points is valuable because it shows vulnerabilities in the power grid. Engineers can then prioritize building additional lines or stations to avoid large-scale blackouts.
 
 ## Stretch 2
 

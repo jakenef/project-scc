@@ -92,11 +92,52 @@ def classify_edges(graph: GRAPH, trees: list[dict[str, list[int]]]) -> dict[str,
     Return a dictionary containing sets of each class of edges
     """
 
+    # 1. Get prepost numbers in a nice format
+
+    prepostForest = trees
+
+    prepostNodes: dict[str, tuple[int, int]] = {}
+    for tree in prepostForest:
+        for entry in tree.items():
+            node = entry[0]
+            prepostList = entry[1]
+            preNumber = prepostList[0]
+            postNumber = prepostList[1]
+            prepostNodes[node] = (preNumber, postNumber)
+
+    # 2. Make an edge list
+
+    edgeList: list[tuple[str, str]] = []
+    for node in graph:
+        for neighbor in graph[node]:
+            edgeList.append((node, neighbor))
+
+    # 3. Classify each edge based on rules for prepost numbers
+
+    treeForwardSet: set[tuple[str, str]] = set()
+    backSet: set[tuple[str, str]] = set()
+    crossSet: set[tuple[str, str]] = set()
+
+    for edge in edgeList:
+        fromNode = edge[0]
+        toNode = edge[1]
+        fromNodePrepost = prepostNodes[fromNode]
+        toNodePrepost = prepostNodes[toNode]
+        # if fromNode is an ancestor of toNode
+        if fromNodePrepost[0] < toNodePrepost[0] and fromNodePrepost[1] > toNodePrepost[1]:
+            treeForwardSet.add(edge)
+            # if toNode is an ancestor of fromNode
+        elif toNodePrepost[0] < fromNodePrepost[0] and toNodePrepost[1] > fromNodePrepost[1]:
+            backSet.add(edge)
+            # if they are cross
+        else:
+            crossSet.add(edge)
+
     classification = {
         # type: ignore
-        'tree/forward': set(),
-        'back': set(),
-        'cross': set()
+        'tree/forward': treeForwardSet,
+        'back': backSet,
+        'cross': crossSet
     }
 
     return classification
