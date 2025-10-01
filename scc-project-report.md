@@ -343,15 +343,15 @@ An articulation point in my mind is a point of interest on a graph because it is
 
 ### Design Experience
 
-_Fill me in_
+I worked with Brandon Monson and Porter Schollenberger on September 29 and used a dataset of Wikipedia requests for adminship because it has clear, labeled interactions between users that map naturally to graph structures and downstream predictions. I adapted the data by extracting user nodes and edges from support and oppose votes so the graph is consistent for analysis. I interpreted results by relating unique voting relationships to see how specific communities of voters act.
 
 ### Dataset Description
 
-_Fill me in_
+The dataset I chose was the Wikipedia request for adminship voting network. The nodes were represented by 11,380 unique Wikipedia users. The edges were represented by 189,003 directed voting relationships. What that means is that each edge from A to B was a vote from A on user B's adminship request. There were vote types of positive, negative, and neutral.
 
 ### Findings Discussion
 
-_Fill me in_
+The overall graph findings were that the total SCC count was 8,931 from my algorithm. The largest SCC was one made of 2,449 users, and there were lots of 'trivial' SCC's which were made of just one user. There were actually only 2 nontrivial SCC's according to my analysis. Sources were users who vote but never recieve votes, so there were lots of these. Sinks were users who recieve votes but don't vote on others. The big SCC is the core community with mutual voting relationships. This shows there is a real world connection from the graph that is that there is an established community of active editors, that vote on each other's requests. Being connected to this community likely improves adminship success.
 
 ## Project Review
 

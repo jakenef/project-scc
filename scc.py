@@ -1,6 +1,12 @@
 import random
 import sys
 from time import time
+# import kagglehub
+
+# Download latest version
+# path = kagglehub.dataset_download("boneacrabonjac/wiki-rfa")
+
+# print("Path to dataset files:", path)
 
 GRAPH = dict[str, list[str]]
 sys.setrecursionlimit(10000)
@@ -54,6 +60,8 @@ def find_sccs(graph: GRAPH) -> list[set[str]]:
     # Add reversed edges
     for node in graph:
         for neighbor in graph[node]:
+            if neighbor not in reverseGraph:
+                reverseGraph[neighbor] = []
             reverseGraph[neighbor].append(node)
 
     # 2. run DFS on reversed graph to get postorder numbers
@@ -108,6 +116,9 @@ def classify_edges(graph: GRAPH, trees: list[dict[str, list[int]]]) -> dict[str,
     # 2. Make an edge list
 
     edgeList: list[tuple[str, str]] = []
+    for node in graph:
+        for neighbor in graph[node]:
+            edgeList.append((node, neighbor))
     for node in graph:
         for neighbor in graph[node]:
             edgeList.append((node, neighbor))
