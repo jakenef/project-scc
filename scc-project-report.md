@@ -140,8 +140,6 @@ Not counting the input, most space expensive operations are storing the visited 
 
 - Empirical order of growth (if different from theoretical): **N/A**
 
-![img](img.png) <- do i need this?
-
 In quite the contrast to our last project, RSA encryption, this prepost function actually lines up pretty well with the theoretical analysis I did on it for time complexity. The empirical data and the theoretical prediction are in sync for the most part, except for a few outliers. I believe this is because we are no longer dealing with bit-level predictions which can be tricky and more machine-dependent.
 
 ## Core
@@ -355,4 +353,4 @@ The overall graph findings were that the total SCC count was 8,931 from my algor
 
 ## Project Review
 
-_Fill me in_
+For our post-project comparison, we each implemented the SCC algorithm on the Wikipedia requests-for-adminship dataset so we were able to compare. Porter rewrote his SCC function after realizing he had used a sort operation incorrectly, and once fixed his results lined up closely with mine. Brandon’s results, however, diverged—his graphs for baseline and core did not match ours and he reported only about half as many SCCs tracked for the same dataset. Despite these differences in output, we all agreed on the same time complexity of O(v+e) and the same space complexity requirements. Porter also extended the project by classifying edges with his implementation, while I did not. Overall, the exercise highlighted how small design decisions (like where to sort) can affect correctness even when complexity analysis is consistent across implementations.
